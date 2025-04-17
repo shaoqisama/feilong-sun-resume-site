@@ -1,7 +1,14 @@
 
-import { Briefcase, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { Briefcase, ChevronRight, ChevronDown } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { useLanguage } from './LanguageProvider';
+import { Button } from './ui/button';
 
 const Experience = () => {
+  const { t } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+
   const experiences = [
     {
       period: "2023.10.24 – Present",
@@ -37,7 +44,10 @@ const Experience = () => {
         "Led KPI report automation and troubleshooting.",
         "Acted as CU interface."
       ]
-    },
+    }
+  ];
+
+  const hiddenExperiences = [
     {
       period: "2022.11.01 – 2022.12.08",
       title: "Ooredoo Qatar FIFA 2022",
@@ -95,15 +105,15 @@ const Experience = () => {
   ];
 
   return (
-    <section id="experience" className="py-24 bg-secondary/50">
+    <section id="experience" className="py-24 bg-secondary/50 dark:bg-muted/10">
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="section-heading">
           <Briefcase className="text-primary" />
-          Professional Experience
+          {t('experience', 'title')}
         </h2>
         
         <h3 className="text-xl font-semibold mb-4 font-heading">
-          Ericsson (Xi'an) ICT Services Co., Ltd. — Network Engineer (JS5)
+          {t('experience', 'subtitle')}
         </h3>
         <p className="text-muted-foreground mb-12">Jul 2013 – Present</p>
         
@@ -118,11 +128,11 @@ const Experience = () => {
               <h4 className="text-lg font-semibold mb-1">{exp.title}</h4>
               {exp.role && (
                 <div className="text-primary font-medium mb-1">
-                  {exp.role}
+                  {t('experience', 'role')} {exp.role}
                 </div>
               )}
               <div className="mb-2 flex items-center gap-1">
-                <span className="text-sm font-medium">Tools:</span>
+                <span className="text-sm font-medium">{t('experience', 'tools')}</span>
                 <span className="text-sm text-muted-foreground">{exp.tools}</span>
               </div>
               <ul className="space-y-1 mt-3">
@@ -137,36 +147,92 @@ const Experience = () => {
           ))}
         </div>
         
-        <div className="mt-12">
-          <h3 className="text-lg font-semibold mb-6 text-foreground/80 font-heading">
-            Earlier Projects
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {olderExperiences.map((exp, index) => (
-              <div 
-                key={index} 
-                className="bg-white rounded-lg p-6 shadow-sm border border-border/50 animate-on-scroll fade-in card-hover"
-              >
-                <div className="mb-1 font-mono text-sm text-muted-foreground">
-                  {exp.period}
-                </div>
-                <h4 className="text-lg font-semibold mb-1">{exp.title}</h4>
-                <div className="mb-2 text-sm text-muted-foreground">
-                  <span className="font-medium">Tools:</span> {exp.tools}
-                </div>
-                <ul className="space-y-1 mt-3">
-                  {exp.description.map((item, i) => (
-                    <li key={i} className="flex items-start">
-                      <ChevronRight className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                      <span className="text-muted-foreground">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+        <Collapsible
+          open={isOpen}
+          onOpenChange={setIsOpen}
+          className="mt-8"
+        >
+          <div className="flex justify-center">
+            <CollapsibleTrigger asChild>
+              <Button variant="outline" className="flex items-center gap-1">
+                {isOpen ? (
+                  <>
+                    {t('experience', 'showLess')}
+                    <ChevronDown className="h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    {t('experience', 'showMore')}
+                    <ChevronRight className="h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </CollapsibleTrigger>
           </div>
-        </div>
+          
+          <CollapsibleContent>
+            <div className="mt-8 relative pl-0 md:pl-32">
+              {hiddenExperiences.map((exp, index) => (
+                <div key={index} className="timeline-item animate-on-scroll fade-in">
+                  <div className="timeline-dot"></div>
+                  <div className="timeline-date">{exp.period}</div>
+                  <div className="mb-1 font-mono text-sm text-muted-foreground md:hidden">
+                    {exp.period}
+                  </div>
+                  <h4 className="text-lg font-semibold mb-1">{exp.title}</h4>
+                  {exp.role && (
+                    <div className="text-primary font-medium mb-1">
+                      {t('experience', 'role')} {exp.role}
+                    </div>
+                  )}
+                  <div className="mb-2 flex items-center gap-1">
+                    <span className="text-sm font-medium">{t('experience', 'tools')}</span>
+                    <span className="text-sm text-muted-foreground">{exp.tools}</span>
+                  </div>
+                  <ul className="space-y-1 mt-3">
+                    {exp.description.map((item, i) => (
+                      <li key={i} className="flex items-start">
+                        <ChevronRight className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
+                        <span className="text-muted-foreground">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-12">
+              <h3 className="text-lg font-semibold mb-6 text-foreground/80 font-heading">
+                {t('experience', 'earlierProjects')}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {olderExperiences.map((exp, index) => (
+                  <div 
+                    key={index} 
+                    className="glass-card rounded-lg p-6 shadow-sm animate-on-scroll fade-in card-hover"
+                  >
+                    <div className="mb-1 font-mono text-sm text-muted-foreground">
+                      {exp.period}
+                    </div>
+                    <h4 className="text-lg font-semibold mb-1">{exp.title}</h4>
+                    <div className="mb-2 text-sm text-muted-foreground">
+                      <span className="font-medium">{t('experience', 'tools')}</span> {exp.tools}
+                    </div>
+                    <ul className="space-y-1 mt-3">
+                      {exp.description.map((item, i) => (
+                        <li key={i} className="flex items-start">
+                          <ChevronRight className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
+                          <span className="text-muted-foreground">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </div>
     </section>
   );
