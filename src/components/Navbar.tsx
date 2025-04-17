@@ -1,6 +1,7 @@
 
 import { useState, useEffect, ReactNode } from 'react';
 import { Menu, X } from 'lucide-react';
+import { DownloadCV } from './DownloadCV';
 
 interface NavbarProps {
   children?: ReactNode;
@@ -58,8 +59,9 @@ const Navbar = ({ children }: NavbarProps) => {
             ))}
           </div>
 
-          {/* Theme and Language Controls */}
-          <div className="hidden md:flex items-center">
+          {/* Theme, Language Controls and Download CV */}
+          <div className="hidden md:flex items-center gap-3">
+            <DownloadCV />
             {children}
           </div>
 
@@ -87,7 +89,10 @@ const Navbar = ({ children }: NavbarProps) => {
                   {link.title}
                 </a>
               ))}
-              <div className="pt-2 border-t border-border/10">
+              <div className="pt-4 pb-2 border-t border-border/10">
+                <DownloadCV />
+              </div>
+              <div className="flex">
                 {children}
               </div>
             </div>
