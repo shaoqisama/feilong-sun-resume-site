@@ -4,11 +4,11 @@ import { useLanguage } from './LanguageProvider';
 import { Progress } from '@/components/ui/progress';
 import { useEffect, useState } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts';
+import { useTheme } from './ThemeProvider';
 
 const Skills = () => {
   const { t } = useLanguage();
+  const { theme } = useTheme();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showProgress, setShowProgress] = useState(false);
 
@@ -72,16 +72,6 @@ const Skills = () => {
     }
   ];
 
-  // Data for the radar chart
-  const radarData = skillCategories.map(category => {
-    const avgSkill = category.skills.reduce((sum, skill) => sum + skill.level, 0) / category.skills.length;
-    return {
-      subject: category.name,
-      A: avgSkill,
-      fullMark: 100
-    };
-  });
-
   // Toggle category expansion
   const toggleCategory = (categoryName: string) => {
     if (expanded === categoryName) {
@@ -91,6 +81,16 @@ const Skills = () => {
     }
   };
 
+  // Calculate average skill level for each category
+  const categoryAverages = skillCategories.map(category => {
+    const avgSkill = category.skills.reduce((sum, skill) => sum + skill.level, 0) / category.skills.length;
+    return {
+      name: category.name,
+      value: Math.round(avgSkill),
+      icon: category.icon
+    };
+  });
+
   return (
     <section id="skills" className="py-20 bg-white dark:bg-slate-900">
       <div className="container mx-auto px-4 md:px-6">
@@ -99,35 +99,32 @@ const Skills = () => {
           {t('skills', 'title')}
         </h2>
 
-        {/* Radar Chart for Skills Overview */}
-        <div className="mb-10 glass-card rounded-xl p-4 shadow-sm animate-on-scroll fade-in">
-          <h3 className="text-lg font-semibold mb-4 text-center">Skills Overview</h3>
-          <div className="h-[300px] w-full">
-            <ChartContainer 
-              config={{
-                theme: {
-                  light: "#3b82f6",
-                  dark: "#93c5fd"
-                }
-              }}
-              className="h-full w-full"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-                  <PolarGrid className="stroke-muted-foreground/50" />
-                  <PolarAngleAxis dataKey="subject" className="fill-foreground text-xs" />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} className="fill-muted-foreground" />
-                  <Radar
-                    name="Skill Level"
-                    dataKey="A"
-                    stroke="var(--color-theme)"
-                    fill="var(--color-theme)"
-                    fillOpacity={0.5}
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </RadarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
+        {/* Skills Overview Card */}
+        <div className="mb-10 glass-card rounded-xl p-6 shadow-sm animate-on-scroll fade-in">
+          <h3 className="text-lg font-semibold mb-6 text-center">Skills Overview</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {categoryAverages.map((category, index) => (
+              <div 
+                key={index} 
+                className="flex flex-col items-center p-4 bg-secondary/30 dark:bg-secondary/10 rounded-lg hover:bg-secondary/50 dark:hover:bg-secondary/20 transition-all cursor-pointer"
+                onClick={() => toggleCategory(skillCategories[index].name)}
+              >
+                <div className="mb-2">{category.icon}</div>
+                <h4 className="text-sm font-medium mb-2">{category.name}</h4>
+                <div className="relative w-20 h-20 mb-2">
+                  <div 
+                    className="w-20 h-20 rounded-full border-4 border-muted flex items-center justify-center"
+                    style={{
+                      background: `conic-gradient(var(--color-primary) ${category.value}%, transparent 0)`
+                    }}
+                  >
+                    <div className="w-14 h-14 rounded-full bg-background flex items-center justify-center text-sm font-bold">
+                      {category.value}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
