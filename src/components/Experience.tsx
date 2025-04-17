@@ -117,7 +117,7 @@ const Experience = () => {
         </h3>
         <p className="text-muted-foreground mb-12">Jul 2013 – Present</p>
         
-        <div className="relative pl-0 md:pl-32">
+        <div className="relative pl-0 md:pl-36">
           {experiences.map((exp, index) => (
             <div key={index} className="timeline-item animate-on-scroll fade-in">
               <div className="timeline-dot"></div>
@@ -171,7 +171,7 @@ const Experience = () => {
           </div>
           
           <CollapsibleContent>
-            <div className="mt-8 relative pl-0 md:pl-32">
+            <div className="mt-8 relative pl-0 md:pl-36">
               {hiddenExperiences.map((exp, index) => (
                 <div key={index} className="timeline-item animate-on-scroll fade-in">
                   <div className="timeline-dot"></div>

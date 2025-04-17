@@ -24,7 +24,7 @@ export function LanguageToggle() {
           <Globe className="h-5 w-5 text-foreground" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="bg-card text-card-foreground border-border">
         <DropdownMenuItem onClick={() => setLanguage('en')} className={language === 'en' ? 'bg-muted' : ''}>
           English
         </DropdownMenuItem>
