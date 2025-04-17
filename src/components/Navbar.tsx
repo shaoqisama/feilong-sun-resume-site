@@ -1,8 +1,12 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { Menu, X } from 'lucide-react';
 
-const Navbar = () => {
+interface NavbarProps {
+  children?: ReactNode;
+}
+
+const Navbar = ({ children }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -34,7 +38,7 @@ const Navbar = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-sm shadow-sm' : 'bg-transparent'}`}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-sm shadow-sm dark:bg-slate-900/90' : 'bg-transparent'}`}>
       <nav className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <a href="#top" className="font-heading font-bold text-xl text-primary">
@@ -54,6 +58,11 @@ const Navbar = () => {
             ))}
           </div>
 
+          {/* Theme and Language Controls */}
+          <div className="hidden md:flex items-center">
+            {children}
+          </div>
+
           {/* Mobile Menu Button */}
           <button 
             className="md:hidden text-foreground"
@@ -66,7 +75,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-md py-4 px-4 animate-fade-in">
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-slate-900 shadow-md py-4 px-4 animate-fade-in">
             <div className="flex flex-col space-y-4">
               {navLinks.map((link, index) => (
                 <a 
@@ -78,6 +87,9 @@ const Navbar = () => {
                   {link.title}
                 </a>
               ))}
+              <div className="pt-2 border-t border-border/10">
+                {children}
+              </div>
             </div>
           </div>
         )}
