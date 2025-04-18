@@ -1,4 +1,3 @@
-
 import { ArrowDownCircle, Mail, Github, Music, Camera } from 'lucide-react';
 import { useLanguage } from './LanguageProvider';
 
@@ -6,7 +5,7 @@ const Hero = () => {
   const { t } = useLanguage();
   
   return (
-    <section id="top" className="min-h-screen pt-20 flex flex-col justify-center relative overflow-hidden">
+    <section id="top" className="min-h-screen pt-20 flex flex-col justify-center relative overflow-hidden bg-gradient-to-br from-background to-background dark:from-slate-900 dark:via-blue-900/50 dark:to-purple-900/50">
       <div className="absolute w-[500px] h-[500px] bg-primary/5 rounded-full -top-64 -right-64 blur-3xl"></div>
       <div className="absolute w-[300px] h-[300px] bg-accent/5 rounded-full -bottom-32 -left-32 blur-3xl"></div>
       
