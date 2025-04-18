@@ -1,5 +1,4 @@
-
-import { Mail, Github, ExternalLink } from 'lucide-react';
+import { Mail, Github, ExternalLink, Phone, MessageSquare } from 'lucide-react';
 import { useLanguage } from './LanguageProvider';
 
 const Contact = () => {
@@ -20,14 +19,14 @@ const Contact = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <a 
-              href="mailto:contact@example.com" 
+              href="mailto:shaoqisama@gmail.com" 
               className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg shadow-sm hover:bg-primary/90 transition-colors"
             >
               <Mail size={20} />
               {t('contact', 'email')}
             </a>
             <a 
-              href="https://shaoqisama.github.io" 
+              href="https://github.com/shaoqisama" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 px-6 py-3 bg-card text-foreground rounded-lg shadow-sm border border-border/20 hover:bg-secondary/70 transition-colors"
@@ -35,26 +34,49 @@ const Contact = () => {
               <Github size={20} />
               GitHub
             </a>
+            <a 
+              href="tel:+8618509298651" 
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-card text-foreground rounded-lg shadow-sm border border-border/20 hover:bg-secondary/70 transition-colors"
+            >
+              <Phone size={20} />
+              {t('contact', 'phone')}
+            </a>
           </div>
           
-          <div className="bg-card dark:bg-slate-800/50 rounded-xl p-8 shadow-sm border border-border/20 animate-on-scroll fade-in">
-            <h3 className="text-xl font-semibold mb-6 font-heading">
-              Let's Build Beautiful Things Together
-            </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-card dark:bg-slate-800/50 rounded-xl p-8 shadow-sm border border-border/20 animate-on-scroll fade-in">
+              <h3 className="text-xl font-semibold mb-6 font-heading">
+                {t('contact', 'wechatTitle')}
+              </h3>
+              <div className="flex flex-col items-center gap-4">
+                <img 
+                  src="/wechat-qr.jpg" 
+                  alt="WeChat QR Code" 
+                  className="w-48 h-48 object-cover rounded-lg shadow-sm"
+                />
+                <p className="text-muted-foreground">
+                  {t('contact', 'wechatDescription')}
+                </p>
+              </div>
+            </div>
             
-            <p className="text-muted-foreground mb-6">
-              Whether you're interested in discussing telecommunications, AI/ML applications, or creative collaborations in music or photography, I'm always open to connect and explore new opportunities.
-            </p>
-            
-            <a 
-              href="https://shaoqisama.github.io" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-primary hover:underline"
-            >
-              Visit my blog
-              <ExternalLink size={16} />
-            </a>
+            <div className="bg-card dark:bg-slate-800/50 rounded-xl p-8 shadow-sm border border-border/20 animate-on-scroll fade-in">
+              <h3 className="text-xl font-semibold mb-6 font-heading">
+                {t('contact', 'messageTitle')}
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                {t('contact', 'messageDescription')}
+              </p>
+              <a 
+                href="https://shaoqisama.github.io" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-primary hover:underline"
+              >
+                {t('contact', 'visitBlog')}
+                <ExternalLink size={16} />
+              </a>
+            </div>
           </div>
         </div>
       </div>

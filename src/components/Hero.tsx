@@ -26,7 +26,7 @@ const Hero = () => {
           
           <div className="flex flex-wrap gap-4 justify-center mb-10">
             <a 
-              href="mailto:example@example.com" 
+              href="mailto:shaoqisama@gmail.com" 
               className="flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"
             >
               <Mail size={18} />
@@ -42,7 +42,7 @@ const Hero = () => {
           </div>
           
           <div className="flex gap-4 text-muted-foreground justify-center">
-            <a href="https://shaoqisama.github.io" className="hover:text-primary transition-colors" aria-label="GitHub">
+            <a href="https://github.com/shaoqisama/" className="hover:text-primary transition-colors" aria-label="GitHub">
               <Github size={20} />
             </a>
             <a href="https://music.apple.com/cn/album/%E5%91%BD%E4%B8%AD%E6%B3%A8%E5%AE%9A-single/1771827378" className="hover:text-primary transition-colors" aria-label="Music">

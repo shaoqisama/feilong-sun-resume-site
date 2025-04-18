@@ -55,8 +55,14 @@ type TranslationKeys = {
     getInTouch: string;
     name: string;
     email: string;
+    phone: string;
     message: string;
     send: string;
+    wechatTitle: string;
+    wechatDescription: string;
+    messageTitle: string;
+    messageDescription: string;
+    visitBlog: string;
   };
   footer: {
     copyright: string;
@@ -117,8 +123,14 @@ const translations: Record<Language, TranslationKeys> = {
       getInTouch: "Get in touch",
       name: "Name",
       email: "Email",
+      phone: "Phone",
       message: "Message",
-      send: "Send Message"
+      send: "Send Message",
+      wechatTitle: "WeChat",
+      wechatDescription: "Scan the QR code to add me on WeChat",
+      messageTitle: "Let's Build Beautiful Things Together",
+      messageDescription: "Whether you're interested in discussing telecommunications, AI/ML applications, or creative collaborations in music or photography, I'm always open to connect and explore new opportunities.",
+      visitBlog: "Visit my blog"
     },
     footer: {
       copyright: "© 2024 Feilong Sun. All rights reserved."
@@ -177,8 +189,14 @@ const translations: Record<Language, TranslationKeys> = {
       getInTouch: "与我联系",
       name: "姓名",
       email: "电子邮件",
+      phone: "电话",
       message: "留言",
-      send: "发送消息"
+      send: "发送消息",
+      wechatTitle: "微信",
+      wechatDescription: "扫描二维码添加我的微信",
+      messageTitle: "让我们一起创造美好",
+      messageDescription: "无论您是想讨论电信、AI/ML应用，还是音乐或摄影方面的创意合作，我都乐于与您联系并探索新的机会。",
+      visitBlog: "访问我的博客"
     },
     footer: {
       copyright: "© 2024 孙飞龙。保留所有权利。"
