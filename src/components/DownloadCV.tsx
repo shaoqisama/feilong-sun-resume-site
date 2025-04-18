@@ -20,7 +20,7 @@ export function DownloadCV() {
         description: language === 'en' ? 'Please wait...' : '请稍等...',
       });
 
-      // First, create a container to hold our CV content
+      // Create a container for the PDF content
       const container = document.createElement('div');
       container.style.width = '100%';
       container.style.maxWidth = '210mm'; // A4 width
@@ -29,21 +29,54 @@ export function DownloadCV() {
       container.style.backgroundColor = 'white';
       container.style.color = 'black';
       
-      // Clone only the specific sections we want in our CV
-      const sections = ['hero', 'about', 'experience', 'education', 'skills'];
+      // Define the main sections to include in the CV
+      const sectionsToInclude = [
+        { id: 'about', selector: 'section#about' },
+        { id: 'experience', selector: 'section#experience' },
+        { id: 'education', selector: 'section#education' },
+        { id: 'skills', selector: 'section#skills' },
+        { id: 'creative-projects', selector: 'section#creative-projects' }
+      ];
       
-      for (const sectionId of sections) {
-        const section = document.getElementById(sectionId);
-        if (section) {
-          const clone = section.cloneNode(true) as HTMLElement;
+      // Add name and title at the top
+      const header = document.createElement('div');
+      header.style.textAlign = 'center';
+      header.style.marginBottom = '20px';
+      header.innerHTML = `
+        <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">Feilong Sun</h1>
+        <h2 style="font-size: 18px; color: #666; margin-bottom: 16px;">
+          ${language === 'en' ? 'Network Engineer & Creative Technologist' : '网络工程师 & 创意技术师'}
+        </h2>
+        <div style="height: 2px; width: 100px; background: linear-gradient(to right, #3b82f6, #8b5cf6); margin: 0 auto 16px;"></div>
+      `;
+      container.appendChild(header);
+      
+      // Clone each section
+      for (const section of sectionsToInclude) {
+        const originalSection = document.querySelector(section.selector);
+        if (originalSection) {
+          // Clone the section deeply
+          const clonedSection = originalSection.cloneNode(true) as HTMLElement;
           
-          // Remove any interactive elements
-          const elementsToRemove = clone.querySelectorAll('button, a[href="#"], .CollapsibleTrigger');
-          elementsToRemove.forEach(el => el.parentNode?.removeChild(el));
+          // Fix heading styles
+          const headings = clonedSection.querySelectorAll('h2');
+          headings.forEach(h => {
+            if (h instanceof HTMLElement) {
+              h.style.fontSize = '22px';
+              h.style.fontWeight = 'bold';
+              h.style.marginBottom = '16px';
+              h.style.paddingBottom = '8px';
+              h.style.borderBottom = '1px solid #eee';
+            }
+          });
           
-          // Expand all collapsible contents for PDF
-          const collapsibleContents = clone.querySelectorAll('.CollapsibleContent');
-          collapsibleContents.forEach(el => {
+          // Remove interactive elements
+          const toRemove = clonedSection.querySelectorAll('button, a[href="#"], .CollapsibleTrigger');
+          toRemove.forEach(el => el.parentNode?.removeChild(el));
+          
+          // Ensure collapsible content is visible
+          const collapsibles = clonedSection.querySelectorAll('.CollapsibleContent');
+          collapsibles.forEach(el => {
             if (el instanceof HTMLElement) {
               el.style.display = 'block';
               el.style.height = 'auto';
@@ -51,28 +84,44 @@ export function DownloadCV() {
             }
           });
           
-          container.appendChild(clone);
+          // Clean up unnecessary classes that might affect styling
+          const elements = clonedSection.querySelectorAll('*');
+          elements.forEach(el => {
+            if (el.classList.contains('animate-on-scroll') || 
+                el.classList.contains('fade-in')) {
+              el.classList.remove('animate-on-scroll', 'fade-in');
+            }
+          });
+          
+          // Add to container
+          container.appendChild(clonedSection);
+          
+          // Add spacing between sections
+          container.appendChild(document.createElement('hr'));
         }
       }
-
-      // Add a footer with contact information
+      
+      // Contact information footer
       const footer = document.createElement('div');
       footer.style.marginTop = '20px';
       footer.style.padding = '10px';
       footer.style.borderTop = '1px solid #eee';
       footer.style.textAlign = 'center';
-      footer.style.fontSize = '0.8rem';
+      footer.style.fontSize = '12px';
       footer.innerHTML = `
         <p>Email: contact@example.com | Visit: <a href="https://shaoqisama.github.io">shaoqisama.github.io</a></p>
       `;
       container.appendChild(footer);
       
-      // Temporarily add to document for conversion (will be hidden)
-      container.style.position = 'absolute';
+      // Add container to document (hidden) for conversion
+      container.style.position = 'fixed';
+      container.style.top = '0';
       container.style.left = '-9999px';
+      container.style.width = '210mm'; // A4 width
+      container.style.zIndex = '-1000';
       document.body.appendChild(container);
       
-      // Configure PDF options with better quality settings
+      // Configure PDF options with optimized settings
       const options = {
         margin: [10, 10, 10, 10],
         filename: `Feilong_Sun_CV_${language === 'en' ? 'English' : 'Chinese'}.pdf`,
@@ -80,10 +129,10 @@ export function DownloadCV() {
         html2canvas: { 
           scale: 2, 
           useCORS: true, 
-          logging: false,
+          logging: true,
           letterRendering: true,
           allowTaint: true,
-          foreignObjectRendering: true
+          backgroundColor: '#ffffff'
         },
         jsPDF: { 
           unit: 'mm', 
@@ -94,7 +143,7 @@ export function DownloadCV() {
         }
       };
 
-      // Generate and download PDF
+      // Generate PDF
       await html2pdf().from(container).set(options).save();
       
       // Clean up
