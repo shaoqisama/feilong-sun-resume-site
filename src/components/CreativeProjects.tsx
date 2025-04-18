@@ -1,4 +1,5 @@
-import { Palette, Music, Camera } from 'lucide-react';
+
+import { Palette, Music, Camera, Code } from 'lucide-react';
 import { useLanguage } from './LanguageProvider';
 
 const CreativeProjects = () => {
@@ -29,6 +30,17 @@ const CreativeProjects = () => {
           title: "Photography Gallery",
           description: "Personal photo gallery showcasing nature and urban photography.",
           link: "https://shaoqisama.github.io/gallery/"
+        }
+      ]
+    },
+    {
+      title: "Audio Software Development",
+      icon: <Code className="h-12 w-12 text-primary/80" />,
+      items: [
+        {
+          title: "Audio DSP Projects",
+          description: "Development of audio software using the JUCE framework and C++.",
+          link: "https://shaoqisama.github.io"
         }
       ]
     }
