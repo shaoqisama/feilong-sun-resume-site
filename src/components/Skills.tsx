@@ -1,19 +1,19 @@
-
 import { Code, Zap, Cpu, Cloud } from 'lucide-react';
 import { useLanguage } from './LanguageProvider';
 import { Progress } from '@/components/ui/progress';
 import { useEffect, useState } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useTheme } from './ThemeProvider';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Skills = () => {
   const { t } = useLanguage();
   const { theme } = useTheme();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showProgress, setShowProgress] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    // Use setTimeout to trigger animation after component is mounted
     const timer = setTimeout(() => {
       setShowProgress(true);
     }, 300);
@@ -72,7 +72,6 @@ const Skills = () => {
     }
   ];
 
-  // Toggle category expansion
   const toggleCategory = (categoryName: string) => {
     if (expanded === categoryName) {
       setExpanded(null);
@@ -81,7 +80,6 @@ const Skills = () => {
     }
   };
 
-  // Calculate average skill level for each category
   const categoryAverages = skillCategories.map(category => {
     const avgSkill = category.skills.reduce((sum, skill) => sum + skill.level, 0) / category.skills.length;
     return {
@@ -99,60 +97,70 @@ const Skills = () => {
           {t('skills', 'title')}
         </h2>
 
-        {/* Skills Overview Card */}
-        <div className="mb-10 glass-card rounded-xl p-6 shadow-sm animate-on-scroll fade-in">
-          <h3 className="text-lg font-semibold mb-6 text-center">Skills Overview</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="mb-10 glass-card rounded-xl p-4 md:p-6 shadow-sm animate-on-scroll fade-in">
+          <h3 className="text-lg font-semibold mb-6 text-center">{t('skills', 'overview')}</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
             {categoryAverages.map((category, index) => (
               <div 
                 key={index} 
-                className="flex flex-col items-center p-4 bg-secondary/30 dark:bg-secondary/10 rounded-lg hover:bg-secondary/50 dark:hover:bg-secondary/20 transition-all cursor-pointer"
+                className="flex flex-col items-center p-3 md:p-4 bg-secondary/30 dark:bg-secondary/10 rounded-lg hover:bg-secondary/50 dark:hover:bg-secondary/20 transition-all cursor-pointer"
                 onClick={() => toggleCategory(skillCategories[index].name)}
               >
                 <div className="mb-2">{category.icon}</div>
-                <h4 className="text-sm font-medium mb-2">{category.name}</h4>
-                <div className="relative w-20 h-20 mb-2">
-                  <div 
-                    className="w-20 h-20 rounded-full border-4 border-muted flex items-center justify-center"
-                    style={{
-                      background: `conic-gradient(var(--color-primary) ${category.value}%, transparent 0)`
-                    }}
-                  >
-                    <div className="w-14 h-14 rounded-full bg-background flex items-center justify-center text-sm font-bold">
-                      {category.value}%
+                <h4 className="text-xs md:text-sm font-medium mb-2 text-center">{category.name}</h4>
+                {!isMobile ? (
+                  <div className="relative w-16 md:w-20 h-16 md:h-20 mb-2">
+                    <div 
+                      className="w-full h-full rounded-full border-4 border-muted flex items-center justify-center"
+                      style={{
+                        background: `conic-gradient(var(--color-primary) ${category.value}%, transparent 0)`
+                      }}
+                    >
+                      <div className="w-10 md:w-14 h-10 md:h-14 rounded-full bg-background flex items-center justify-center text-xs md:text-sm font-bold">
+                        {category.value}%
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="w-full px-2">
+                    <Progress 
+                      value={showProgress ? category.value : 0} 
+                      className="h-2 bg-secondary"
+                    />
+                    <span className="text-xs text-muted-foreground mt-1 block text-center">
+                      {category.value}%
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Detailed Skills List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {skillCategories.map((category, catIndex) => (
             <Collapsible
               key={catIndex}
               open={expanded === category.name}
               onOpenChange={() => toggleCategory(category.name)}
-              className="glass-card rounded-xl p-6 shadow-sm animate-on-scroll fade-in"
+              className="glass-card rounded-xl p-4 md:p-6 shadow-sm animate-on-scroll fade-in"
               style={{ animationDelay: `${catIndex * 100}ms` }}
             >
               <CollapsibleTrigger className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
                   {category.icon}
-                  <h3 className="text-lg font-semibold">{category.name}</h3>
+                  <h3 className="text-base md:text-lg font-semibold">{category.name}</h3>
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  {expanded === category.name ? 'Less' : 'More'}
+                <div className="text-xs md:text-sm text-muted-foreground">
+                  {expanded === category.name ? t('skills', 'less') : t('skills', 'more')}
                 </div>
               </CollapsibleTrigger>
               
-              <CollapsibleContent className="space-y-4 mt-4">
+              <CollapsibleContent className="space-y-3 md:space-y-4 mt-4">
                 {category.skills.map((skill, skillIndex) => (
                   <div key={skillIndex} className="animate-on-scroll fade-in" style={{ animationDelay: `${skillIndex * 100}ms` }}>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-sm text-muted-foreground">{skill.name}</span>
+                    <div className="flex flex-col md:flex-row md:justify-between mb-1">
+                      <span className="text-xs md:text-sm text-muted-foreground mb-1 md:mb-0">{skill.name}</span>
                       <span className="text-xs text-muted-foreground">{skill.level}%</span>
                     </div>
                     <Progress 
