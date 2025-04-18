@@ -1,7 +1,7 @@
-
 import { useState, useEffect, ReactNode } from 'react';
 import { Menu, X } from 'lucide-react';
 import { DownloadCV } from './DownloadCV';
+import { useLanguage } from './LanguageProvider';
 
 interface NavbarProps {
   children?: ReactNode;
@@ -10,6 +10,7 @@ interface NavbarProps {
 const Navbar = ({ children }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { language } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,12 +31,12 @@ const Navbar = ({ children }: NavbarProps) => {
   };
 
   const navLinks = [
-    { title: 'About', href: '#about' },
-    { title: 'Experience', href: '#experience' },
-    { title: 'Education', href: '#education' },
-    { title: 'Skills', href: '#skills' },
-    { title: 'Projects', href: '#projects' },
-    { title: 'Contact', href: '#contact' },
+    { titleEn: 'About', titleZh: '关于', href: '#about' },
+    { titleEn: 'Experience', titleZh: '经验', href: '#experience' },
+    { titleEn: 'Education', titleZh: '教育', href: '#education' },
+    { titleEn: 'Skills', titleZh: '技能', href: '#skills' },
+    { titleEn: 'Projects', titleZh: '项目', href: '#projects' },
+    { titleEn: 'Contact', titleZh: '联系', href: '#contact' },
   ];
 
   return (
@@ -54,7 +55,7 @@ const Navbar = ({ children }: NavbarProps) => {
                 href={link.href}
                 className="font-medium transition-colors hover:text-primary"
               >
-                {link.title}
+                {language === 'en' ? link.titleEn : link.titleZh}
               </a>
             ))}
           </div>
@@ -86,7 +87,7 @@ const Navbar = ({ children }: NavbarProps) => {
                   className="font-medium py-2 transition-colors hover:text-primary"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {link.title}
+                  {language === 'en' ? link.titleEn : link.titleZh}
                 </a>
               ))}
               <div className="pt-4 pb-2 border-t border-border/10">
