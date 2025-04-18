@@ -44,7 +44,7 @@ export function DownloadCV() {
       toast({
         title: language === 'en' ? 'PDF Generated Successfully' : 'PDF生成成功',
         description: language === 'en' ? 'Your CV has been downloaded' : '您的简历已下载',
-        variant: 'success',
+        variant: "default", // Changed from "success" to "default"
       });
     } catch (error) {
       console.error('PDF generation error:', error);
