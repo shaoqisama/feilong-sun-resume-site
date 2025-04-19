@@ -35,7 +35,7 @@ const Navbar = ({ children }: NavbarProps) => {
     { titleEn: 'Experience', titleZh: '经验', href: '#experience' },
     { titleEn: 'Education', titleZh: '教育', href: '#education' },
     { titleEn: 'Skills', titleZh: '技能', href: '#skills' },
-    { titleEn: 'Projects', titleZh: '项目', href: '#projects' },
+    { titleEn: 'Projects', titleZh: '项目', href: '#creative-projects' },
     { titleEn: 'Contact', titleZh: '联系', href: '#contact' },
   ];
 
