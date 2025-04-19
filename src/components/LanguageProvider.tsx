@@ -45,10 +45,27 @@ type TranslationKeys = {
   };
   skills: {
     title: string;
+    overview: string;
+    programming: string;
+    networking: string;
+    cloud: string;
+    ai: string;
+    tools: string;
+    languages: string;
+    frameworks: string;
+    databases: string;
+    devops: string;
+    softSkills: string;
   };
   projects: {
     title: string;
     explore: string;
+    musicProduction: string;
+    photography: string;
+    audioSoftware: string;
+    creativeArts: string;
+    visualArts: string;
+    technical: string;
   };
   contact: {
     title: string;
@@ -112,11 +129,28 @@ const translations: Record<Language, TranslationKeys> = {
       period: "Sep 2010 – May 2013"
     },
     skills: {
-      title: "Technical Skills"
+      title: "Technical Skills",
+      overview: "Skills Overview",
+      programming: "Programming",
+      networking: "Networking",
+      cloud: "Cloud",
+      ai: "AI",
+      tools: "Tools",
+      languages: "Languages",
+      frameworks: "Frameworks",
+      databases: "Databases",
+      devops: "DevOps",
+      softSkills: "Soft Skills"
     },
     projects: {
       title: "Creative & Personal Projects",
-      explore: "Explore"
+      explore: "Explore",
+      musicProduction: "Music Production",
+      photography: "Photography",
+      audioSoftware: "Audio Software",
+      creativeArts: "Creative Arts",
+      visualArts: "Visual Arts",
+      technical: "Technical"
     },
     contact: {
       title: "Contact",
@@ -178,11 +212,28 @@ const translations: Record<Language, TranslationKeys> = {
       period: "2010年9月 – 2013年5月"
     },
     skills: {
-      title: "技术技能"
+      title: "技术技能",
+      overview: "技能概览",
+      programming: "编程",
+      networking: "网络",
+      cloud: "云技术",
+      ai: "人工智能",
+      tools: "工具",
+      languages: "语言",
+      frameworks: "框架",
+      databases: "数据库",
+      devops: "DevOps",
+      softSkills: "软技能"
     },
     projects: {
       title: "创意与个人项目",
-      explore: "探索"
+      explore: "探索",
+      musicProduction: "音乐制作",
+      photography: "摄影",
+      audioSoftware: "音频软件",
+      creativeArts: "创意艺术",
+      visualArts: "视觉艺术",
+      technical: "技术"
     },
     contact: {
       title: "联系方式",

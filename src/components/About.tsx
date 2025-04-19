@@ -65,7 +65,7 @@ const About = () => {
                   <li>
                     <div className="flex justify-between mb-1">
                       <span className="font-medium">{t('about', 'english')}</span>
-                      <span className="text-muted-foreground text-sm">TOEIC Oral Level 6</span>
+                      <span className="text-muted-foreground text-sm">TOEIC Oral/CET Level 6</span>
                     </div>
                     <div className="skill-bar">
                       <div className="skill-progress" style={{ width: '85%' }}></div>

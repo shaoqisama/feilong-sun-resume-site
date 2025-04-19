@@ -1,9 +1,8 @@
-
 import { GraduationCap } from 'lucide-react';
 import { useLanguage } from './LanguageProvider';
 
 const Education = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <section id="education" className="py-20 bg-white dark:bg-slate-900">
@@ -34,12 +33,14 @@ const Education = () => {
             </div>
             
             <div className="mt-6 pt-6 border-t border-border/10">
-              <h4 className="font-semibold mb-3">About the Program</h4>
+              <h4 className="font-semibold mb-3">
+                {language === 'zh' ? "专业概述" : "About the Program"}
+              </h4>
               <p className="text-muted-foreground leading-relaxed">
-                The Communication Engineering program at Xi'an Technological University provides 
-                comprehensive education in network technologies, telecommunications systems, and 
-                signal processing. The curriculum combines theoretical foundations with practical 
-                applications in modern communication systems.
+                {language === 'zh' 
+                  ? "西安工业大学通信工程专业提供网络技术、电信系统和信号处理方面的全面教育。课程将现代通信系统的理论基础与实际应用相结合，培养具备扎实专业知识和实践能力的通信工程人才。"
+                  : "The Communication Engineering program at Xi'an Technological University provides comprehensive education in network technologies, telecommunications systems, and signal processing. The curriculum combines theoretical foundations with practical applications in modern communication systems."
+                }
               </p>
             </div>
           </div>
