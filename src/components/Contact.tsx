@@ -1,5 +1,6 @@
 import { Mail, Github, ExternalLink, Phone, MessageSquare } from 'lucide-react';
 import { useLanguage } from './LanguageProvider';
+import wechatQrImage from '/wechat-qr.jpg';
 
 const Contact = () => {
   const { t } = useLanguage();
@@ -50,7 +51,7 @@ const Contact = () => {
               </h3>
               <div className="flex flex-col items-center gap-4">
                 <img 
-                  src="/wechat-qr.jpg" 
+                  src={wechatQrImage} 
                   alt="WeChat QR Code" 
                   className="w-48 h-48 object-cover rounded-lg shadow-sm"
                 />
