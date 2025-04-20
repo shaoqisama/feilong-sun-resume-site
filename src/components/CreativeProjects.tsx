@@ -32,6 +32,7 @@ const CreativeProjects = () => {
         }
       ]
     },
+    /* Commented out Audio Software Development section
     {
       title: language === 'zh' ? "音频软件开发" : "Audio Software Development",
       icon: <Code className="h-12 w-12 text-primary/80" />,
@@ -43,6 +44,7 @@ const CreativeProjects = () => {
         }
       ]
     }
+    */
   ];
 
   return (
@@ -53,7 +55,7 @@ const CreativeProjects = () => {
           {t('projects', 'title')}
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projectGroups.map((group, index) => (
             <div 
               key={index} 
