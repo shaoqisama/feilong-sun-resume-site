@@ -23,37 +23,37 @@ const Skills = () => {
 
   const skillCategories = [
     {
-      name: language === 'zh' ? "LTE技术" : "LTE",
+      name: language === 'zh' ? "LTE技术" : "LTE Technology",
       icon: <Zap className="text-primary" />,
       skills: [
         { 
-          name: language === 'zh' ? "PCI/邻区/TAC/RSI规划与一致性" : "PCI/Neighbor/TAC/RSI planning & consistency", 
+          name: language === 'zh' ? "网络规划与参数优化" : "Network planning & parameter optimization", 
           level: 90 
         },
         { 
-          name: language === 'zh' ? "RF与集群调优，共享RAN故障排除" : "RF & cluster tuning, shared RAN troubleshooting", 
+          name: language === 'zh' ? "RF优化与多厂商RAN故障排查" : "RF optimization & multi-vendor RAN troubleshooting", 
           level: 85 
         },
         { 
-          name: language === 'zh' ? "功能测试（如ASGH、IFHO）" : "Feature testing (e.g., ASGH, IFHO)", 
+          name: language === 'zh' ? "系统Feature与性能调优" : "System feature implementation & performance tuning", 
           level: 80 
         }
       ]
     },
     {
-      name: language === 'zh' ? "NR (5G)技术" : "NR (5G)",
+      name: language === 'zh' ? "5G NR技术" : "5G NR Technology",
       icon: <Zap className="text-primary" />,
       skills: [
         { 
-          name: language === 'zh' ? "AAS倾角与SSB波束优化" : "AAS tilt & SSB beam optimization", 
+          name: language === 'zh' ? "NSA/SA部署与异构网络优化" : "NSA/SA deployment & inter-RAT optimization", 
           level: 85 
         },
         { 
-          name: language === 'zh' ? "SSB模式调整与可观测性" : "SSB pattern tuning and observability", 
+          name: language === 'zh' ? "AAS倾角配置与SSB波束优化" : "AAS tilt configuration & SSB beam optimization", 
           level: 80 
         },
         { 
-          name: language === 'zh' ? "针对KPI的功能调优（如SSB功率提升）" : "Feature tuning for KPIs (e.g., SSB power boost)", 
+          name: language === 'zh' ? "KPI监控与功能性能调优" : "KPI monitoring & feature-based performance tuning", 
           level: 75 
         }
       ]
@@ -63,19 +63,19 @@ const Skills = () => {
       icon: <Cpu className="text-primary" />,
       skills: [
         { 
-          name: language === 'zh' ? "提示词工程与RAG集成" : "Prompt engineering & RAG integration", 
+          name: language === 'zh' ? "提示词工程与RAG实施" : "Prompt engineering & RAG implementation", 
           level: 90 
         },
         { 
-          name: language === 'zh' ? "使用LoRA进行LLM微调" : "LLM fine-tuning using LoRA", 
+          name: language === 'zh' ? "LLM微调与企业级应用" : "LLM fine-tuning & enterprise applications", 
           level: 85 
         },
         { 
-          name: language === 'zh' ? "合成数据工作流" : "Synthetic data workflows", 
+          name: language === 'zh' ? "合成数据生成与增强" : "Synthetic data generation & augmentation", 
           level: 80 
         },
         { 
-          name: language === 'zh' ? "部署本地模型（Llama2、TeleBERT）" : "Deployed local models (Llama2, TeleBERT)", 
+          name: language === 'zh' ? "本地LLM部署（Llama、TeleBERT）" : "On-premise LLM deployment (Llama, TeleBERT)", 
           level: 75 
         }
       ]
@@ -85,41 +85,41 @@ const Skills = () => {
       icon: <Code className="text-primary" />,
       skills: [
         { 
-          name: language === 'zh' ? "脚本开发：Python、Golang、JavaScript、C++" : "Scripting: Python, Golang, JavaScript, C++", 
+          name: language === 'zh' ? "Python、Golang、JavaScript、C++、Rust" : "Programming: Python, Golang, JavaScript, C++, Rust", 
           level: 90 
         },
         { 
-          name: language === 'zh' ? "数据管道、回归/分类" : "Data pipelines, regression/classification", 
+          name: language === 'zh' ? "数据管道与ML模型开发" : "Data pipelines & ML model development", 
           level: 85 
         },
         { 
-          name: language === 'zh' ? "基于ENIQ的KPI分析（Sybase）" : "KPI analysis from ENIQ (Sybase)", 
+          name: language === 'zh' ? "时序KPI分析与预测" : "Time-series KPI analysis & forecasting", 
           level: 80 
         },
         { 
-          name: language === 'zh' ? "工具：Dash、Evidently、Streamlit、LangChain" : "Tools: Dash, Evidently, Streamlit, LangChain", 
+          name: language === 'zh' ? "开发框架：Dash、Evidently、LangChain、Next.js" : "Development frameworks: Dash, Evidently, LangChain, Next.js", 
           level: 75 
         }
       ]
     },
     {
-      name: language === 'zh' ? "云原生与Linux" : "Cloud Native & Linux",
+      name: language === 'zh' ? "云原生与DevOps" : "Cloud Native & DevOps",
       icon: <Cloud className="text-primary" />,
       skills: [
         { 
-          name: language === 'zh' ? "Docker与Kubernetes在Linux环境中的应用" : "Docker & Kubernetes in Linux environments", 
+          name: language === 'zh' ? "容器编排：Docker与Kubernetes" : "Container orchestration: Docker & Kubernetes", 
           level: 85 
         },
         { 
-          name: language === 'zh' ? "云服务：AWS、Azure、Terraform" : "Cloud: AWS, Azure, Terraform", 
+          name: language === 'zh' ? "云基础设施：AWS、Azure、Terraform" : "Cloud infrastructure: AWS, Azure, Terraform", 
           level: 80 
         },
         { 
-          name: language === 'zh' ? "CI/CD：Jenkins、GitLab CI" : "CI/CD: Jenkins, GitLab CI", 
+          name: language === 'zh' ? "CI/CD管道自动化：Jenkins、GitLab CI" : "CI/CD pipeline automation: Jenkins, GitLab CI", 
           level: 75 
         },
         { 
-          name: language === 'zh' ? "监控：Kubeflow" : "Monitoring: Kubeflow", 
+          name: language === 'zh' ? "基础设施监控：Kubeflow、Zabbix、Ansible" : "Infrastructure monitoring: Kubeflow, Zabbix, Ansible", 
           level: 70 
         }
       ]
