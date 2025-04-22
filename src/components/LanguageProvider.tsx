@@ -166,7 +166,7 @@ const translations: Record<Language, TranslationKeys> = {
       send: "Send Message",
       wechatTitle: "WeChat",
       wechatDescription: "Scan the QR code to add me on WeChat",
-      messageTitle: "Let's Build Beautiful Things Together",
+      messageTitle: "Let's Build Beautiful Things Together😄",
       messageDescription: "Whether you're interested in discussing telecommunications, AI/ML applications, or creative collaborations in music or photography, I'm always open to connect and explore new opportunities.",
       visitBlog: "Visit my blog"
     },
@@ -251,7 +251,7 @@ const translations: Record<Language, TranslationKeys> = {
       send: "发送消息",
       wechatTitle: "微信",
       wechatDescription: "扫描二维码添加我的微信",
-      messageTitle: "让我们一起创造美好",
+      messageTitle: "让我们一起创造美好😄",
       messageDescription: "无论您是想讨论电信、AI/ML应用，还是音乐或摄影方面的创意合作，我都乐于与您联系并探索新的机会。",
       visitBlog: "访问我的博客"
     },
