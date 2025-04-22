@@ -1,10 +1,8 @@
-
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from './LanguageProvider';
 import { useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
-import html2pdf from 'html2pdf.js';
 
 export function DownloadCV() {
   const { language, t } = useLanguage();
@@ -16,18 +14,25 @@ export function DownloadCV() {
     try {
       setIsGenerating(true);
       toast({
-        title: language === 'en' ? 'Generating PDF' : '正在生成PDF',
+        title: language === 'en' ? 'Preparing CV for download' : '准备简历下载',
         description: language === 'en' ? 'Please wait...' : '请稍等...',
       });
 
-      // Create a container for the PDF content
-      const container = document.createElement('div');
-      container.style.width = '100%';
-      container.style.maxWidth = '210mm'; // A4 width
-      container.style.margin = '0 auto';
-      container.style.padding = '20px';
-      container.style.backgroundColor = 'white';
-      container.style.color = 'black';
+      // Create a container for the print content
+      const printContainer = document.createElement('div');
+      printContainer.id = 'print-container';
+      Object.assign(printContainer.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        zIndex: '9999',
+        backgroundColor: 'white',
+        padding: '20px',
+        overflow: 'auto',
+        boxSizing: 'border-box'
+      });
       
       // Define the main sections to include in the CV
       const sectionsToInclude = [
@@ -38,10 +43,23 @@ export function DownloadCV() {
         { id: 'creative-projects', selector: 'section#creative-projects' }
       ];
       
+      // Create styled content wrapper
+      const contentWrapper = document.createElement('div');
+      Object.assign(contentWrapper.style, {
+        maxWidth: '800px',
+        margin: '0 auto',
+        fontFamily: 'Arial, sans-serif',
+        color: 'black',
+        backgroundColor: 'white'
+      });
+      
       // Add name and title at the top
       const header = document.createElement('div');
-      header.style.textAlign = 'center';
-      header.style.marginBottom = '20px';
+      Object.assign(header.style, {
+        textAlign: 'center',
+        marginBottom: '20px'
+      });
+      
       header.innerHTML = `
         <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">Feilong Sun</h1>
         <h2 style="font-size: 18px; color: #666; margin-bottom: 16px;">
@@ -49,7 +67,28 @@ export function DownloadCV() {
         </h2>
         <div style="height: 2px; width: 100px; background: linear-gradient(to right, #3b82f6, #8b5cf6); margin: 0 auto 16px;"></div>
       `;
-      container.appendChild(header);
+      contentWrapper.appendChild(header);
+      
+      // Add print instructions
+      const printInstructions = document.createElement('div');
+      Object.assign(printInstructions.style, {
+        padding: '15px',
+        marginBottom: '20px',
+        border: '1px solid #ddd',
+        borderRadius: '5px',
+        backgroundColor: '#f9f9f9',
+        textAlign: 'center',
+        color: '#555'
+      });
+      printInstructions.className = 'print-instructions no-print';
+      printInstructions.innerHTML = `
+        <p>${language === 'en' ? 'To download as PDF, use the browser\'s print function (Ctrl+P / ⌘+P).' : '要下载为PDF，请使用浏览器的打印功能 (Ctrl+P / ⌘+P)。'}</p>
+        <p>${language === 'en' ? 'Select "Save as PDF" as the destination.' : '选择"另存为PDF"作为目标。'}</p>
+        <button id="close-print-view" style="padding: 8px 16px; background-color: #f43f5e; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">
+          ${language === 'en' ? 'Close Print View' : '关闭打印视图'}
+        </button>
+      `;
+      contentWrapper.appendChild(printInstructions);
       
       // Clone each section
       for (const section of sectionsToInclude) {
@@ -62,106 +101,241 @@ export function DownloadCV() {
           const headings = clonedSection.querySelectorAll('h2');
           headings.forEach(h => {
             if (h instanceof HTMLElement) {
-              h.style.fontSize = '22px';
-              h.style.fontWeight = 'bold';
-              h.style.marginBottom = '16px';
-              h.style.paddingBottom = '8px';
-              h.style.borderBottom = '1px solid #eee';
+              Object.assign(h.style, {
+                fontSize: '22px',
+                fontWeight: 'bold',
+                marginBottom: '16px',
+                paddingBottom: '8px',
+                borderBottom: '1px solid #eee'
+              });
             }
           });
           
-          // Remove interactive elements
-          const toRemove = clonedSection.querySelectorAll('button, a[href="#"], .CollapsibleTrigger');
-          toRemove.forEach(el => el.parentNode?.removeChild(el));
-          
-          // Ensure collapsible content is visible
-          const collapsibles = clonedSection.querySelectorAll('.CollapsibleContent');
-          collapsibles.forEach(el => {
-            if (el instanceof HTMLElement) {
-              el.style.display = 'block';
-              el.style.height = 'auto';
-              el.style.overflow = 'visible';
-            }
+          // Create a section wrapper for better styling
+          const sectionWrapper = document.createElement('div');
+          Object.assign(sectionWrapper.style, {
+            marginBottom: '30px'
           });
           
-          // Clean up unnecessary classes that might affect styling
-          const elements = clonedSection.querySelectorAll('*');
-          elements.forEach(el => {
+          // Process specific sections
+          
+          // For Experience section - expand all content
+          if (section.id === 'experience') {
+            // Find all collapsible content and make it visible
+            const collapsibleContents = clonedSection.querySelectorAll('[role="region"], [data-state="closed"]');
+            collapsibleContents.forEach(el => {
+              if (el instanceof HTMLElement) {
+                el.style.display = 'block';
+                el.style.height = 'auto';
+                el.style.overflow = 'visible';
+                el.setAttribute('data-state', 'open');
+              }
+            });
+            
+            // Remove show more/less buttons and other controls
+            const buttons = clonedSection.querySelectorAll('button, [role="button"]');
+            buttons.forEach(button => {
+              const parent = button.parentNode;
+              if (parent) parent.removeChild(button);
+            });
+          }
+          
+          // For Skills section - expand all skills
+          if (section.id === 'skills') {
+            // Force all collapsibles open
+            const skillContents = clonedSection.querySelectorAll('[role="region"], [data-state="closed"]');
+            skillContents.forEach(el => {
+              if (el instanceof HTMLElement) {
+                el.style.display = 'block';
+                el.style.height = 'auto';
+                el.style.overflow = 'visible';
+                el.setAttribute('data-state', 'open');
+              }
+            });
+            
+            // Fix progress bars
+            const progressBars = clonedSection.querySelectorAll('[role="progressbar"]');
+            progressBars.forEach(bar => {
+              if (bar instanceof HTMLElement) {
+                bar.style.height = '10px';
+                bar.style.backgroundColor = '#e2e8f0';
+                bar.style.borderRadius = '5px';
+                bar.style.overflow = 'hidden';
+                
+                // Create a visible indicator if needed
+                const value = bar.getAttribute('aria-valuenow') || '0';
+                const valueNum = parseInt(value);
+                
+                // Check if indicator exists
+                let indicator = bar.querySelector('div');
+                if (!indicator) {
+                  indicator = document.createElement('div');
+                  bar.appendChild(indicator);
+                }
+                
+                if (indicator instanceof HTMLElement) {
+                  Object.assign(indicator.style, {
+                    width: `${valueNum}%`,
+                    height: '100%',
+                    backgroundColor: '#6366f1',
+                    borderRadius: '5px'
+                  });
+                }
+              }
+            });
+            
+            // Remove interactive elements
+            const triggers = clonedSection.querySelectorAll('[aria-controls]');
+            triggers.forEach(trigger => {
+              // Make non-interactive but keep visible
+              if (trigger instanceof HTMLElement) {
+                trigger.style.cursor = 'default';
+                trigger.removeAttribute('aria-controls');
+              }
+            });
+          }
+          
+          // Remove all interactive elements and unnecessary styling
+          const interactiveElements = clonedSection.querySelectorAll('button, a[href="#"]');
+          interactiveElements.forEach(el => {
+            const parent = el.parentNode;
+            if (parent) parent.removeChild(el);
+          });
+          
+          // Clean up classes that might affect printing
+          const allElements = clonedSection.querySelectorAll('*');
+          allElements.forEach(el => {
             if (el.classList.contains('animate-on-scroll') || 
                 el.classList.contains('fade-in')) {
               el.classList.remove('animate-on-scroll', 'fade-in');
             }
+            
+            // Clean up any dark mode related classes
+            if (el.classList.contains('dark')) {
+              el.classList.remove('dark');
+            }
           });
           
-          // Add to container
-          container.appendChild(clonedSection);
+          // Style cards consistently
+          const cards = clonedSection.querySelectorAll('.glass-card, .card-hover');
+          cards.forEach(card => {
+            if (card instanceof HTMLElement) {
+              Object.assign(card.style, {
+                backgroundColor: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: '8px',
+                padding: '16px',
+                marginBottom: '16px'
+              });
+            }
+          });
           
-          // Add spacing between sections
-          container.appendChild(document.createElement('hr'));
+          // Add to section wrapper
+          sectionWrapper.appendChild(clonedSection);
+          contentWrapper.appendChild(sectionWrapper);
+          
+          // Add divider between sections
+          const divider = document.createElement('hr');
+          Object.assign(divider.style, {
+            margin: '20px 0',
+            border: 'none',
+            borderTop: '1px solid #eee'
+          });
+          contentWrapper.appendChild(divider);
         }
       }
       
-      // Contact information footer
+      // Add contact information
       const footer = document.createElement('div');
-      footer.style.marginTop = '20px';
-      footer.style.padding = '10px';
-      footer.style.borderTop = '1px solid #eee';
-      footer.style.textAlign = 'center';
-      footer.style.fontSize = '12px';
-      footer.innerHTML = `
-        <p>Email: contact@example.com | Visit: <a href="https://shaoqisama.github.io">shaoqisama.github.io</a></p>
-      `;
-      container.appendChild(footer);
-      
-      // Add container to document (hidden) for conversion
-      container.style.position = 'fixed';
-      container.style.top = '0';
-      container.style.left = '-9999px';
-      container.style.width = '210mm'; // A4 width
-      container.style.zIndex = '-1000';
-      document.body.appendChild(container);
-      
-      // Configure PDF options with optimized settings
-      const options = {
-        margin: [10, 10, 10, 10],
-        filename: `Feilong_Sun_CV_${language === 'en' ? 'English' : 'Chinese'}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-          scale: 2, 
-          useCORS: true, 
-          logging: true,
-          letterRendering: true,
-          allowTaint: true,
-          backgroundColor: '#ffffff'
-        },
-        jsPDF: { 
-          unit: 'mm', 
-          format: 'a4', 
-          orientation: 'portrait',
-          compress: true,
-          precision: 16
-        }
-      };
-
-      // Generate PDF
-      await html2pdf().from(container).set(options).save();
-      
-      // Clean up
-      document.body.removeChild(container);
-      
-      toast({
-        title: language === 'en' ? 'PDF Generated Successfully' : 'PDF生成成功',
-        description: language === 'en' ? 'Your CV has been downloaded' : '您的简历已下载',
-        variant: "default",
+      Object.assign(footer.style, {
+        textAlign: 'center',
+        marginTop: '20px',
+        padding: '10px',
+        borderTop: '1px solid #eee',
+        fontSize: '12px'
       });
+      footer.innerHTML = `
+        <p>Email: contact@example.com | Visit: <a href="https://shaoqisama.github.io" style="color: #3b82f6; text-decoration: none;">shaoqisama.github.io</a></p>
+      `;
+      contentWrapper.appendChild(footer);
+      
+      // Add print styles
+      const printStyles = document.createElement('style');
+      printStyles.textContent = `
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          #print-container, #print-container * {
+            visibility: visible;
+          }
+          .no-print {
+            display: none !important;
+          }
+          #print-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: auto;
+            padding: 0;
+            margin: 0;
+          }
+          @page {
+            size: A4;
+            margin: 1cm;
+          }
+          [role="progressbar"] > div {
+            background-color: #6366f1 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          [role="progressbar"] {
+            background-color: #e2e8f0 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+        }
+      `;
+      
+      // Add container and styles to document
+      printContainer.appendChild(contentWrapper);
+      document.head.appendChild(printStyles);
+      document.body.appendChild(printContainer);
+      
+      // Handle close button click
+      const closeButton = document.getElementById('close-print-view');
+      if (closeButton) {
+        closeButton.addEventListener('click', () => {
+          document.body.removeChild(printContainer);
+          document.head.removeChild(printStyles);
+          setIsGenerating(false);
+        });
+      }
+      
+      // Delay slightly to ensure rendering is complete
+      setTimeout(() => {
+        // Notify user
+        toast({
+          title: language === 'en' ? 'Ready to save as PDF' : '准备另存为PDF',
+          description: language === 'en' ? 'Use your browser\'s print function to save as PDF' : '使用浏览器的打印功能另存为PDF',
+          duration: 5000,
+        });
+        
+        // Automatically open print dialog
+        window.print();
+        
+        // Set state to false after printing
+        setIsGenerating(false);
+      }, 500);
+      
     } catch (error) {
       console.error('PDF generation error:', error);
       toast({
-        title: language === 'en' ? 'Error Generating PDF' : 'PDF生成错误',
+        title: language === 'en' ? 'Error Preparing CV' : '准备简历时出错',
         description: language === 'en' ? 'Please try again later' : '请稍后再试',
         variant: 'destructive',
       });
-    } finally {
       setIsGenerating(false);
     }
   };
