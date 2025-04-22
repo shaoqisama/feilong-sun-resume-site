@@ -1,7 +1,7 @@
 import { Code, Zap, Cpu, Cloud } from 'lucide-react';
 import { useLanguage } from './LanguageProvider';
 import { Progress } from '@/components/ui/progress';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useTheme } from './ThemeProvider';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -12,6 +12,8 @@ const Skills = () => {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showProgress, setShowProgress] = useState(false);
   const isMobile = useIsMobile();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -126,6 +128,168 @@ const Skills = () => {
     }
   ];
 
+  // New skill keywords for the animation
+  const skillKeywords = [
+    // LTE
+    'LTE', 'RF Optimization', 'VoLTE', 'Network Planning', 'Parameter Tuning',
+    // 5G
+    'NR', 'NSA/SA', 'Beamforming', 'AAS', 'SSB',
+    // AI
+    'Generative AI', 'LLM', 'RAG', 'Prompt Engineering', 'Fine-tuning',
+    // ML
+    'Python', 'Golang', 'ML Ops', 'Data Pipeline', 'Forecasting',
+    // Cloud
+    'Kubernetes', 'Docker', 'AWS', 'Azure', 'CI/CD',
+    // Additional keywords
+    'Telecommunications', 'Automation', 'DevOps', 'Analytics', 'Next.js'
+  ];
+
+  // Animation setup and control
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Set canvas size to match its display size
+    const resizeCanvas = () => {
+      const { width, height } = canvas.getBoundingClientRect();
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+    };
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Get primary color from CSS variables
+    const computedStyle = getComputedStyle(document.documentElement);
+    let primaryColor = computedStyle.getPropertyValue('--color-primary').trim() || 
+                     (theme === 'dark' ? '#3b82f6' : '#2563eb');
+    if (!primaryColor) primaryColor = theme === 'dark' ? '#3b82f6' : '#2563eb';
+
+    // Track mouse position
+    let mouseX = 0;
+    let mouseY = 0;
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    });
+
+    // Position keywords in a grid-like layout
+    const keywords = skillKeywords.map((word, index) => {
+      const columns = 5;
+      const rows = Math.ceil(skillKeywords.length / columns);
+      const col = index % columns;
+      const row = Math.floor(index / columns);
+      
+      return {
+        text: word,
+        x: (canvas.width / (columns + 1)) * (col + 1),
+        y: (canvas.height / (rows + 1)) * (row + 1),
+        size: 18,
+        opacity: 0.65,
+        scale: 1,
+        rotation: 0,
+        targetScale: 1,
+        targetRotation: 0,
+        glowIntensity: 0,
+        targetGlowIntensity: 0
+      };
+    });
+
+    const animate = () => {
+      if (!ctx || !canvas) return;
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw keywords
+      keywords.forEach(keyword => {
+        // Check if word is being hovered
+        const textWidth = ctx.measureText(keyword.text).width;
+        const isHovered = 
+          mouseX > keyword.x - textWidth/2 &&
+          mouseX < keyword.x + textWidth/2 &&
+          mouseY > keyword.y - keyword.size/2 &&
+          mouseY < keyword.y + keyword.size/2;
+
+        // Smoothly update target values
+        keyword.targetScale = isHovered ? 1.15 : 1;
+        keyword.targetRotation = isHovered ? 0 : 0;
+        keyword.targetGlowIntensity = isHovered ? 1 : 0;
+
+        // Smooth transitions
+        keyword.scale += (keyword.targetScale - keyword.scale) * 0.1;
+        keyword.rotation += (keyword.targetRotation - keyword.rotation) * 0.1;
+        keyword.glowIntensity += (keyword.targetGlowIntensity - keyword.glowIntensity) * 0.1;
+        keyword.opacity = 0.65 + (keyword.glowIntensity * 0.35);
+
+        // Save context state
+        ctx.save();
+        
+        // Move to word position
+        ctx.translate(keyword.x, keyword.y);
+        ctx.rotate(keyword.rotation);
+        ctx.scale(keyword.scale, keyword.scale);
+
+        // Draw keyword with effects
+        ctx.font = `${isHovered ? 'medium' : ''} ${Math.floor(keyword.size * keyword.scale)}px Inter, system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        
+        // Enhanced glow effect - more subtle
+        if (keyword.glowIntensity > 0) {
+          ctx.shadowColor = primaryColor;
+          ctx.shadowBlur = 12 * keyword.glowIntensity;
+          
+          // Single layer of glow for cleaner effect
+          ctx.fillStyle = `rgba(${primaryColor.startsWith('#') ? 
+            hexToRgb(primaryColor) : 
+            primaryColor.replace('rgb(', '').replace(')', '')}, ${0.2 * keyword.glowIntensity})`;
+          ctx.fillText(keyword.text, 0, 0);
+        }
+
+        // Draw main text
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = theme === 'dark' 
+          ? `rgba(255, 255, 255, ${keyword.opacity})`
+          : `rgba(30, 41, 59, ${keyword.opacity})`;
+        ctx.fillText(keyword.text, 0, 0);
+
+        // Restore context state
+        ctx.restore();
+      });
+
+      // Continue animation for hover effects
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    // Helper function to convert hex to RGB
+    const hexToRgb = (hex: string) => {
+      const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+      const formattedHex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+      
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(formattedHex);
+      return result ? 
+        `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` :
+        '59, 130, 246';
+    };
+
+    // Start animation
+    animate();
+
+    // Cleanup
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, [canvasRef, theme]);
+
   const toggleCategory = (categoryName: string) => {
     if (expanded === categoryName) {
       setExpanded(null);
@@ -227,6 +391,17 @@ const Skills = () => {
               </CollapsibleContent>
             </Collapsible>
           ))}
+        </div>
+        
+        {/* Keyword Map Animation */}
+        <div className="mt-16 glass-card rounded-xl overflow-hidden shadow-sm animate-on-scroll fade-in">
+          <div className="w-full relative">
+            <canvas 
+              ref={canvasRef}
+              className="w-full h-[350px] md:h-[450px]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/5 to-transparent opacity-40"></div>
+          </div>
         </div>
       </div>
     </section>
