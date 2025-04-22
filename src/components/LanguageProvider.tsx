@@ -56,6 +56,8 @@ type TranslationKeys = {
     databases: string;
     devops: string;
     softSkills: string;
+    more: string;
+    less: string;
   };
   projects: {
     title: string;
@@ -140,7 +142,9 @@ const translations: Record<Language, TranslationKeys> = {
       frameworks: "Frameworks",
       databases: "Databases",
       devops: "DevOps",
-      softSkills: "Soft Skills"
+      softSkills: "Soft Skills",
+      more: "More",
+      less: "Less"
     },
     projects: {
       title: "Creative & Personal Projects",
@@ -223,7 +227,9 @@ const translations: Record<Language, TranslationKeys> = {
       frameworks: "框架",
       databases: "数据库",
       devops: "DevOps",
-      softSkills: "软技能"
+      softSkills: "软技能",
+      more: "查看更多",
+      less: "收起"
     },
     projects: {
       title: "创意与个人项目",
