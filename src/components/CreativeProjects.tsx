@@ -32,19 +32,22 @@ const CreativeProjects = () => {
         }
       ]
     },
-    /* Commented out Audio Software Development section
     {
-      title: language === 'zh' ? "音频软件开发" : "Audio Software Development",
+      title: language === 'zh' ? "音频App开发" : "Audio App Development",
       icon: <Code className="h-12 w-12 text-primary/80" />,
       items: [
         {
-          title: language === 'zh' ? "音频DSP项目" : "Audio DSP Projects",
-          description: language === 'zh' ? "使用JUCE框架和C++开发的音频软件。" : "Development of audio software using the JUCE framework and C++.",
-          link: "https://shaoqisama.github.io"
+          title: language === 'zh' ? "AI音效生成器" : "AI Music FX Generator",
+          description: language === 'zh' ? "专为音乐制作设计的AI音效生成工具，可创建独特的声音效果。" : "An app focused on generating music sample FX for music production.",
+          link: "https://shaoqisama.github.io/music-fx-generator/"
+        },
+        {
+          title: language === 'zh' ? "音频化学家" : "Audio Chemist",
+          description: language === 'zh' ? "一款将音乐切片成采样的应用，为音乐制作提供便利。" : "An application for slicing music into samples for music production.",
+          link: "https://shaoqisama.github.io/audio-chemist"
         }
       ]
     }
-    */
   ];
 
   return (
