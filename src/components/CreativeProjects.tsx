@@ -37,9 +37,9 @@ const CreativeProjects = () => {
       icon: <Code className="h-12 w-12 text-primary/80" />,
       items: [
         {
-          title: language === 'zh' ? "AI音效生成器" : "AI Music FX Generator",
+          title: language === 'zh' ? "AI音效生成器" : "AI Music FX Generator: Musicraft",
           description: language === 'zh' ? "专为音乐制作设计的AI音效生成工具，可创建独特的声音效果。" : "An app focused on generating music sample FX for music production.",
-          link: "https://shaoqisama.github.io/music-fx-generator/"
+          link: "https://v0-music-fx-gen-ks.vercel.app/"
         },
         {
           title: language === 'zh' ? "音频化学家" : "Audio Chemist",
